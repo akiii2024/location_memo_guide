@@ -24,9 +24,9 @@
     <section id="toc">
       <h2>目次</h2>
       <ul>
-        <li><a href="#apk-section">Android版（APK）インストール方法（推奨）</a></li>
-        <li><a href="#pwa-android">PWA版（Android）インストール方法</a></li>
-        <li><a href="#pwa-ios">PWA版（iOS）インストール方法</a></li>
+        <li id="toc-apk"><a href="#apk-section">Android版（APK）インストール方法（推奨）</a></li>
+        <li id="toc-pwa-android"><a href="#pwa-android">PWA版（Android）インストール方法</a></li>
+        <li id="toc-pwa-ios"><a href="#pwa-ios">PWA版（iOS）インストール方法</a></li>
         <li><a href="#faq">よくある質問（FAQ）</a></li>
         <li><a href="#contact">お問い合わせ</a></li>
       </ul>
@@ -143,17 +143,27 @@
       document.getElementById('apk-section').style.display = 'none';
       document.getElementById('pwa-android').style.display = 'none';
       document.getElementById('pwa-ios').style.display = 'none';
+      document.getElementById('toc-apk').style.display = 'none';
+      document.getElementById('toc-pwa-android').style.display = 'none';
+      document.getElementById('toc-pwa-ios').style.display = 'none';
+      
       const ua = navigator.userAgent.toLowerCase();
       if (ua.indexOf('android') > -1) {
         document.getElementById('apk-section').style.display = 'block';
         document.getElementById('pwa-android').style.display = 'block';
+        document.getElementById('toc-apk').style.display = 'list-item';
+        document.getElementById('toc-pwa-android').style.display = 'list-item';
       } else if (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1) {
         document.getElementById('pwa-ios').style.display = 'block';
+        document.getElementById('toc-pwa-ios').style.display = 'list-item';
       } else {
         // PCなどその他の場合はすべて表示
         document.getElementById('apk-section').style.display = 'block';
         document.getElementById('pwa-android').style.display = 'block';
         document.getElementById('pwa-ios').style.display = 'block';
+        document.getElementById('toc-apk').style.display = 'list-item';
+        document.getElementById('toc-pwa-android').style.display = 'list-item';
+        document.getElementById('toc-pwa-ios').style.display = 'list-item';
       }
     });
   </script>
