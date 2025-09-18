@@ -4,38 +4,775 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>location_memo インストールガイド</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { font-family: 'Noto Sans JP', sans-serif; margin: 0; padding: 0; background: #f8f9fa; color: #222; }
-    header { background: #1976d2; color: #fff; padding: 1.5rem 1rem; text-align: center; }
-    main { max-width: 700px; margin: 2rem auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
-    h1, h2 { margin-top: 0; }
-    section { margin-bottom: 2.5rem; }
-    a.button { display: inline-block; background: #1976d2; color: #fff; padding: 0.7em 1.5em; border-radius: 4px; text-decoration: none; font-weight: bold; margin-top: 1em; }
-    ul { padding-left: 1.2em; }
-    @media (max-width: 600px) { main { padding: 1rem; } }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #1976d2;
+      --primary-dark: #1565c0;
+      --primary-light: #42a5f5;
+      --secondary-color: #ff6b6b;
+      --bg-color: #f0f2f5;
+      --card-bg: #ffffff;
+      --text-primary: #1a1a2e;
+      --text-secondary: #64748b;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+      --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Background Animation */
+    .bg-animation {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: linear-gradient(-45deg, #667eea, #764ba2, #42a5f5, #1976d2);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating Shapes */
+    .floating-shapes {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+    }
+
+    .shape:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      left: 10%;
+      background: white;
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      right: 10%;
+      top: 20%;
+      background: white;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      animation: float 25s infinite ease-in-out reverse;
+    }
+
+    .shape:nth-child(3) {
+      width: 100px;
+      height: 100px;
+      left: 70%;
+      bottom: 20%;
+      background: white;
+      animation: float 30s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-20px) rotate(120deg); }
+      66% { transform: translateY(20px) rotate(240deg); }
+    }
+
+    /* Header Styles */
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      color: var(--text-primary);
+      padding: 2rem 1rem;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeInScale 1s ease-out 0.3s both;
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Main Container */
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Section Cards */
+    section {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    section.visible {
+      animation: slideInSection 0.6s ease forwards;
+    }
+
+    @keyframes slideInSection {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    section:hover {
+      box-shadow: var(--shadow-xl);
+      transform: translateY(-5px);
+    }
+
+    /* Headings */
+    h2 {
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+      border-radius: 2px;
+      animation: expandWidth 0.8s ease-out;
+    }
+
+    @keyframes expandWidth {
+      from { width: 0; }
+      to { width: 60px; }
+    }
+
+    /* TOC Links */
+    #toc ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #toc li {
+      margin: 0.8rem 0;
+      opacity: 0;
+      animation: fadeInSlide 0.5s ease forwards;
+    }
+
+    #toc li:nth-child(1) { animation-delay: 0.1s; }
+    #toc li:nth-child(2) { animation-delay: 0.2s; }
+    #toc li:nth-child(3) { animation-delay: 0.3s; }
+    #toc li:nth-child(4) { animation-delay: 0.4s; }
+    #toc li:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    #toc a {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #toc a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+      transition: left 0.3s ease;
+      z-index: 0;
+    }
+
+    #toc a:hover::before {
+      left: 0;
+    }
+
+    #toc a:hover {
+      color: white;
+      transform: translateX(10px);
+      box-shadow: var(--shadow-md);
+    }
+
+    #toc a span {
+      position: relative;
+      z-index: 1;
+    }
+
+    #toc a i {
+      margin-right: 12px;
+      font-size: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Buttons */
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    a.button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    a.button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    a.button:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    a.button i {
+      margin-left: 8px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(3px); }
+    }
+
+    /* Lists */
+    ol, ul {
+      padding-left: 1.5rem;
+    }
+
+    ol li, ul li {
+      margin: 1rem 0;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    /* Images */
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-top: 1rem;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    img.loaded {
+      opacity: 1;
+      animation: imageZoomIn 0.5s ease;
+    }
+
+    @keyframes imageZoomIn {
+      from {
+        transform: scale(0.9);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+
+    /* Step Numbers */
+    ol {
+      counter-reset: step-counter;
+      list-style: none;
+    }
+
+    ol li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 3rem;
+      min-height: 3rem;
+    }
+
+    ol li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      animation: pulseNumber 2s infinite;
+    }
+
+    @keyframes pulseNumber {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Back to Top Button */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    #backToTop.show {
+      display: flex;
+      animation: fadeInScale 0.3s ease;
+    }
+
+    #backToTop:hover {
+      transform: translateY(-5px) rotate(360deg);
+      box-shadow: var(--shadow-xl);
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+
+      section {
+        padding: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      #backToTop {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5rem;
+      }
+
+      main {
+        margin: 2rem auto;
+      }
+
+      section {
+        padding: 1rem;
+      }
+    }
+    /* Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-light), var(--secondary-color));
+      z-index: 9999;
+      transition: width 0.3s ease;
+    }
+
+    /* FAQ Accordion */
+    .faq-item {
+      margin: 1rem 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .faq-item:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateX(5px);
+    }
+
+    .faq-question {
+      padding: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: var(--primary-color);
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(25, 118, 210, 0.05);
+    }
+
+    .faq-question i {
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0 1.2rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .faq-item.active .faq-answer {
+      padding: 0 1.2rem 1.2rem;
+      max-height: 500px;
+    }
+
+    /* Installation Steps Enhancement */
+    .step-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .step-card:hover {
+      transform: translateX(10px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, #ffffff 0%, #f0f2f5 100%);
+    }
+
+    /* Notification Badge */
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: linear-gradient(135deg, var(--secondary-color), #ff8787);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Contact Section Enhancement */
+    #contact a {
+      color: var(--primary-color);
+      text-decoration: none;
+      position: relative;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    #contact a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    #contact a:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: var(--card-bg);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 1001;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .mobile-menu-btn span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: var(--primary-color);
+      margin: 5px auto;
+      transition: all 0.3s ease;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--primary-dark);
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Animation for device specific content */
+    .device-specific {
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Hidden elements initial state */
+    #apk-section:not(.visible),
+    #pwa-android:not(.visible),
+    #pwa-ios:not(.visible) {
+      display: none !important;
+    }
+
+    /* Fix for TOC animations */
+    #toc li {
+      transition: all 0.3s ease;
+    }
+
+    #toc li[style*="display: none"] {
+      animation: none !important;
+      position: absolute;
+      visibility: hidden;
+    }
   </style>
 </head>
 <body>
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="spinner" id="loadingSpinner"></div>
+
   <header>
-    <h1>location_memo インストールガイド</h1>
-    <p>あなたの位置情報メモアプリ</p>
+    <h1><i class="fas fa-map-marker-alt"></i> location_memo インストールガイド</h1>
+    <p><i class="fas fa-sticky-note"></i> あなたの位置情報メモアプリ</p>
   </header>
   <main>
-    <section id="toc">
-      <h2>目次</h2>
+    <section id="toc" class="visible">
+      <h2><i class="fas fa-list-ul"></i> 目次</h2>
       <ul>
-        <li id="toc-apk"><a href="#apk-section">Android版（APK）インストール方法（推奨）</a></li>
-        <li id="toc-pwa-android"><a href="#pwa-android">PWA版（Android）インストール方法</a></li>
-        <li id="toc-pwa-ios"><a href="#pwa-ios">PWA版（iOS）インストール方法</a></li>
-        <li><a href="#faq">よくある質問（FAQ）</a></li>
-        <li><a href="#contact">お問い合わせ</a></li>
+        <li id="toc-apk"><a href="#apk-section"><i class="fab fa-android"></i> <span>Android版（APK）インストール方法（推奨）</span></a></li>
+        <li id="toc-pwa-android"><a href="#pwa-android"><i class="fas fa-mobile-alt"></i> <span>PWA版（Android）インストール方法</span></a></li>
+        <li id="toc-pwa-ios"><a href="#pwa-ios"><i class="fab fa-apple"></i> <span>PWA版（iOS）インストール方法</span></a></li>
+        <li><a href="#faq"><i class="fas fa-question-circle"></i> <span>よくある質問（FAQ）</span></a></li>
+        <li><a href="#contact"><i class="fas fa-envelope"></i> <span>お問い合わせ</span></a></li>
       </ul>
     </section>
     <section id="apk-section">
-      <h2>Android版（APK）インストール方法</h2>
+      <h2><i class="fab fa-android"></i> Android版（APK）インストール方法</h2>
       <ol>
         <li>APKファイルをダウンロードします。<br>
-          <a href="https://github.com/akiii2024/location_memo/releases/latest/download/app-release.apk" class="button">APKをダウンロード</a>
+          <a href="https://github.com/akiii2024/location_memo/releases/latest/download/app-release.apk" class="button">APKをダウンロード <i class="fas fa-download"></i></a>
           <br>
         <li>
           <div style="margin-top:0.5em;">通知が表示されたら「開く」を選択してください。</div>
@@ -57,10 +794,10 @@
       <p style="font-size:0.95em; color:#555;">※ セキュリティのため、信頼できる場合のみインストールしてください。</p>
     </section>
     <section id="pwa-android">
-      <h2>PWA版（Android）インストール方法</h2>
+      <h2><i class="fas fa-mobile-alt"></i> PWA版（Android）インストール方法</h2>
       <ol>
         <li>下記のPWA版URLにアクセスします。<br>
-          <a href="https://akiii2024.github.io/location_memo/" class="button">PWA版を開く</a>
+          <a href="https://akiii2024.github.io/location_memo/" class="button">PWA版を開く <i class="fas fa-external-link-alt"></i></a>
           <br>
         <li>
           <div style="margin-top:0.5em;">>画面右上のメニュー（「︙」）をタップしてください。</div>
@@ -82,10 +819,10 @@
       </ol>
     </section>
     <section id="pwa-ios">
-      <h2>PWA版（iOS）インストール方法</h2>
+      <h2><i class="fab fa-apple"></i> PWA版（iOS）インストール方法</h2>
       <ol>
         <li>下記のPWA版URLにSafariでアクセスします。<br>
-          <a href="https://akiii2024.github.io/location_memo/" class="button">PWA版を開く</a>
+          <a href="https://akiii2024.github.io/location_memo/" class="button">PWA版を開く <i class="fas fa-external-link-alt"></i></a>
           <br>
         <li>
           <div style="margin-top:0.5em;">下部の共有ボタン（四角から上矢印）をタップします。</div>
@@ -106,11 +843,33 @@
       </ol>
     </section>
     <section id="faq">
-      <h2>よくある質問（FAQ）</h2>
-      <ul>
-        <li><b>Q. iPhoneでインストールできません</b><br>A. Safariでアクセスし、「ホーム画面に追加」を選択してください。他のブラウザでは追加できません。</li>
-        <li><b>Q. APKがインストールできません</b><br>A. 「提供元不明のアプリ」の許可が必要です。端末の設定から許可してください。</li>
-        <li><b>Q. 動作確認した端末</b><br>A. 以下の端末で動作確認しています。</li>
+      <h2><i class="fas fa-question-circle"></i> よくある質問（FAQ）</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Q. iPhoneでインストールできません</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            A. Safariでアクセスし、「ホーム画面に追加」を選択してください。他のブラウザでは追加できません。
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Q. APKがインストールできません</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            A. 「提供元不明のアプリ」の許可が必要です。端末の設定から許可してください。
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Q. 動作確認した端末</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            A. 以下の端末で動作確認しています。
         <ul>
           <li>Android (apk)</li>
           <ul>
@@ -128,44 +887,438 @@
           </ul>
           <li>動作確認端末はこれからも増やしていきます。<br>また、推奨環境は後日追加します。</li>
         </ul>
-      </ul>
+          </div>
+        </div>
+      </div>
     </section>
     <section id="contact">
-      <h2>お問い合わせ</h2>
+      <h2><i class="fas fa-envelope"></i> お問い合わせ</h2>
       <ul>
         <li>不明点、ご要望などありましたら<a href="mailto:a601023053@st.tachibana-u.ac.jp">a601023053@st.tachibana-u.ac.jp</a> までお問い合わせください。</li>
       </ul>
     </section>
   </main>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" aria-label="トップへ戻る">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
   <script>
+    // Loading Spinner
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        const spinner = document.getElementById('loadingSpinner');
+        if (spinner) spinner.style.display = 'none';
+      }, 500);
+    });
+
     window.addEventListener('DOMContentLoaded', function() {
-      // 初期状態ですべて非表示
-      document.getElementById('apk-section').style.display = 'none';
-      document.getElementById('pwa-android').style.display = 'none';
-      document.getElementById('pwa-ios').style.display = 'none';
-      document.getElementById('toc-apk').style.display = 'none';
-      document.getElementById('toc-pwa-android').style.display = 'none';
-      document.getElementById('toc-pwa-ios').style.display = 'none';
-      
+      // OSによる表示制御を先に実行
       const ua = navigator.userAgent.toLowerCase();
+      const apkSection = document.getElementById('apk-section');
+      const pwaAndroid = document.getElementById('pwa-android');
+      const pwaIos = document.getElementById('pwa-ios');
+      const tocApk = document.getElementById('toc-apk');
+      const tocPwaAndroid = document.getElementById('toc-pwa-android');
+      const tocPwaIos = document.getElementById('toc-pwa-ios');
+      
+      // 初期状態ですべて非表示（完全に削除）
+      if (apkSection) {
+        apkSection.style.display = 'none';
+        apkSection.classList.remove('visible');
+      }
+      if (pwaAndroid) {
+        pwaAndroid.style.display = 'none';
+        pwaAndroid.classList.remove('visible');
+      }
+      if (pwaIos) {
+        pwaIos.style.display = 'none';
+        pwaIos.classList.remove('visible');
+      }
+      if (tocApk) {
+        tocApk.style.display = 'none';
+        tocApk.style.opacity = '0';
+        tocApk.style.height = '0';
+        tocApk.style.margin = '0';
+        tocApk.style.padding = '0';
+        tocApk.style.overflow = 'hidden';
+      }
+      if (tocPwaAndroid) {
+        tocPwaAndroid.style.display = 'none';
+        tocPwaAndroid.style.opacity = '0';
+        tocPwaAndroid.style.height = '0';
+        tocPwaAndroid.style.margin = '0';
+        tocPwaAndroid.style.padding = '0';
+        tocPwaAndroid.style.overflow = 'hidden';
+      }
+      if (tocPwaIos) {
+        tocPwaIos.style.display = 'none';
+        tocPwaIos.style.opacity = '0';
+        tocPwaIos.style.height = '0';
+        tocPwaIos.style.margin = '0';
+        tocPwaIos.style.padding = '0';
+        tocPwaIos.style.overflow = 'hidden';
+      }
+      
+      // OSに応じて表示を切り替え
       if (ua.indexOf('android') > -1) {
-        document.getElementById('apk-section').style.display = 'block';
-        document.getElementById('pwa-android').style.display = 'block';
-        document.getElementById('toc-apk').style.display = 'list-item';
-        document.getElementById('toc-pwa-android').style.display = 'list-item';
+        if (apkSection) {
+          apkSection.style.display = 'block';
+          setTimeout(() => apkSection.classList.add('visible'), 100);
+        }
+        if (pwaAndroid) {
+          pwaAndroid.style.display = 'block';
+          setTimeout(() => pwaAndroid.classList.add('visible'), 200);
+        }
+        if (tocApk) {
+          tocApk.style.display = 'block';
+          tocApk.style.opacity = '1';
+          tocApk.style.height = 'auto';
+          tocApk.style.margin = '0.8rem 0';
+          tocApk.style.padding = '';
+          tocApk.style.overflow = 'visible';
+        }
+        if (tocPwaAndroid) {
+          tocPwaAndroid.style.display = 'block';
+          tocPwaAndroid.style.opacity = '1';
+          tocPwaAndroid.style.height = 'auto';
+          tocPwaAndroid.style.margin = '0.8rem 0';
+          tocPwaAndroid.style.padding = '';
+          tocPwaAndroid.style.overflow = 'visible';
+        }
       } else if (ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1) {
-        document.getElementById('pwa-ios').style.display = 'block';
-        document.getElementById('toc-pwa-ios').style.display = 'list-item';
+        if (pwaIos) {
+          pwaIos.style.display = 'block';
+          setTimeout(() => pwaIos.classList.add('visible'), 100);
+        }
+        if (tocPwaIos) {
+          tocPwaIos.style.display = 'block';
+          tocPwaIos.style.opacity = '1';
+          tocPwaIos.style.height = 'auto';
+          tocPwaIos.style.margin = '0.8rem 0';
+          tocPwaIos.style.padding = '';
+          tocPwaIos.style.overflow = 'visible';
+        }
       } else {
         // PCなどその他の場合はすべて表示
-        document.getElementById('apk-section').style.display = 'block';
-        document.getElementById('pwa-android').style.display = 'block';
-        document.getElementById('pwa-ios').style.display = 'block';
-        document.getElementById('toc-apk').style.display = 'list-item';
-        document.getElementById('toc-pwa-android').style.display = 'list-item';
-        document.getElementById('toc-pwa-ios').style.display = 'list-item';
+        if (apkSection) {
+          apkSection.style.display = 'block';
+          setTimeout(() => apkSection.classList.add('visible'), 100);
+        }
+        if (pwaAndroid) {
+          pwaAndroid.style.display = 'block';
+          setTimeout(() => pwaAndroid.classList.add('visible'), 200);
+        }
+        if (pwaIos) {
+          pwaIos.style.display = 'block';
+          setTimeout(() => pwaIos.classList.add('visible'), 300);
+        }
+        if (tocApk) {
+          tocApk.style.display = 'block';
+          tocApk.style.opacity = '1';
+          tocApk.style.height = 'auto';
+          tocApk.style.margin = '0.8rem 0';
+          tocApk.style.padding = '';
+          tocApk.style.overflow = 'visible';
+        }
+        if (tocPwaAndroid) {
+          tocPwaAndroid.style.display = 'block';
+          tocPwaAndroid.style.opacity = '1';
+          tocPwaAndroid.style.height = 'auto';
+          tocPwaAndroid.style.margin = '0.8rem 0';
+          tocPwaAndroid.style.padding = '';
+          tocPwaAndroid.style.overflow = 'visible';
+        }
+        if (tocPwaIos) {
+          tocPwaIos.style.display = 'block';
+          tocPwaIos.style.opacity = '1';
+          tocPwaIos.style.height = 'auto';
+          tocPwaIos.style.margin = '0.8rem 0';
+          tocPwaIos.style.padding = '';
+          tocPwaIos.style.overflow = 'visible';
+        }
       }
+
+      // Intersection Observer for section animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Observe only visible sections (not TOC and not hidden)
+      document.querySelectorAll('section:not(#toc)').forEach(section => {
+        // Only observe if the section is visible
+        if (section.style.display !== 'none') {
+          sectionObserver.observe(section);
+        }
+      });
+
+      // Image lazy loading and animation
+      const images = document.querySelectorAll('img');
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.classList.add('loaded');
+            imageObserver.unobserve(img);
+          }
+        });
+      }, { threshold: 0.01 });
+
+      images.forEach(img => {
+        imageObserver.observe(img);
+      });
+
+      // Back to Top Button
+      const backToTopBtn = document.getElementById('backToTop');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.classList.add('show');
+        } else {
+          backToTopBtn.classList.remove('show');
+        }
+      });
+
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            const offsetTop = target.offsetTop - 20;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      // Add ripple effect to buttons
+      document.querySelectorAll('a.button').forEach(button => {
+        button.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.classList.add('ripple');
+          
+          // Remove existing ripple
+          const existingRipple = this.querySelector('.ripple');
+          if (existingRipple) {
+            existingRipple.remove();
+          }
+          
+          this.appendChild(ripple);
+          
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      });
+
+      // Add hover tilt effect to visible sections
+      const tiltElements = document.querySelectorAll('section');
+      
+      tiltElements.forEach(elem => {
+        // Only add tilt effect if the section is visible
+        if (elem.style.display !== 'none') {
+          elem.addEventListener('mouseenter', function(e) {
+            if (this.style.display === 'none') return;
+            this.style.transition = 'transform 0.15s ease-out';
+          });
+          
+          elem.addEventListener('mousemove', function(e) {
+            if (this.style.display === 'none') return;
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const deltaX = (x - centerX) / centerX;
+            const deltaY = (y - centerY) / centerY;
+            
+            const tiltX = deltaY * 2;
+            const tiltY = deltaX * -2;
+            
+            this.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(10px)`;
+          });
+          
+          elem.addEventListener('mouseleave', function(e) {
+            if (this.style.display === 'none') return;
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+          });
+        }
+      });
+
+      // Parallax effect for header
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const header = document.querySelector('header');
+        if (header) {
+          header.style.transform = `translateY(${scrolled * 0.5}px)`;
+        }
+      });
+
+      // Add typing effect to header subtitle
+      const subtitle = document.querySelector('header p');
+      if (subtitle) {
+        const text = subtitle.textContent;
+        subtitle.textContent = '';
+        let i = 0;
+        
+        function typeWriter() {
+          if (i < text.length) {
+            subtitle.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeWriter, 50);
+          }
+        }
+        
+        setTimeout(typeWriter, 1000);
+      }
+
+      // FAQ Accordion
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Close other items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+
+      // Progress Bar
+      const progressBar = document.getElementById('progressBar');
+      
+      window.addEventListener('scroll', () => {
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight) * 100;
+        progressBar.style.width = scrolled + '%';
+      });
+
+      // Add animation to list items when visible
+      const listItems = document.querySelectorAll('ol li');
+      const listObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.style.animation = 'slideIn 0.5s ease forwards';
+            }, index * 100);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      listItems.forEach(item => {
+        listObserver.observe(item);
+      });
+
+      // Add device detection notification
+      const deviceNotification = document.createElement('div');
+      deviceNotification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        padding: 1rem 1.5rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+        color: white;
+        border-radius: 50px;
+        box-shadow: var(--shadow-lg);
+        z-index: 500;
+        animation: slideInLeft 0.5s ease, fadeOut 3s ease 3s forwards;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      `;
+      
+      const deviceIcon = ua.indexOf('android') > -1 ? 'fa-android' : 
+                        ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1 ? 'fa-apple' : 
+                        'fa-desktop';
+      const deviceName = ua.indexOf('android') > -1 ? 'Android' : 
+                        ua.indexOf('iphone') > -1 || ua.indexOf('ipad') > -1 ? 'iOS' : 
+                        'PC';
+      
+      deviceNotification.innerHTML = `<i class="fab ${deviceIcon}"></i> ${deviceName}版を表示中`;
+      document.body.appendChild(deviceNotification);
+      
+      setTimeout(() => {
+        deviceNotification.remove();
+      }, 6000);
     });
+
+    // Add CSS for ripple effect and additional animations
+    const style = document.createElement('style');
+    style.textContent = `
+      .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple-animation 0.6s ease-out;
+        pointer-events: none;
+      }
+      
+      @keyframes ripple-animation {
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+      
+      @keyframes slideInLeft {
+        from {
+          transform: translateX(-100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html> 
