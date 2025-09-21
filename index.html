@@ -139,30 +139,39 @@
     }
 
     h2 {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      position: relative;
+      padding-left: 64px;
       font-size: 1.6rem;
       margin-bottom: 24px;
       color: var(--primary);
+      line-height: 1.4;
+      display: block;
+      min-height: 44px;
     }
 
     h2 i {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
       width: 44px;
       height: 44px;
       border-radius: 14px;
       background: rgba(63, 81, 181, 0.12);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      place-items: center;
       font-size: 1.2rem;
-      position: relative;
+      color: var(--primary);
       line-height: 1;
     }
 
     p {
       color: var(--muted);
       margin-bottom: 1rem;
+    }
+
+    section > p {
+      margin-left: 64px;
     }
 
     #toc ul {
@@ -456,6 +465,10 @@
         border-radius: 20px;
       }
 
+      section > p {
+        margin-left: 60px;
+      }
+
       .step-list li {
         padding-left: 3rem;
       }
@@ -477,6 +490,16 @@
 
       h2 {
         font-size: 1.4rem;
+        padding-left: 56px;
+      }
+
+      h2 i {
+        width: 38px;
+        height: 38px;
+      }
+
+      section > p {
+        margin-left: 54px;
       }
 
       #backToTop {
@@ -491,6 +514,7 @@
     <div class="header-inner">
       <nav class="top-nav" aria-label="補助ナビゲーション">
         <a href="about.html"><i class="fas fa-info-circle"></i> アプリ紹介</a>
+        <a href="usage.html"><i class="fas fa-book-open"></i> 使い方ガイド</a>
         <a href="https://github.com/akiii2024/location_memo" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
       </nav>
       <span class="header-badge"><i class="fas fa-map-marker-alt"></i> location_memo</span>
